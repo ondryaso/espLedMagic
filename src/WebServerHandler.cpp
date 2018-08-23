@@ -1,55 +1,5 @@
 #include "WebServerHandler.h"
 
-const char MAINPAGE[] PROGMEM = "<!DOCTYPE html>"
-        "<html lang=\"en\">"
-        "<head>"
-        "    <meta charset=\"UTF-8\">"
-        "    <title>ESP PLOX</title>"
-        "    <script type=\"text/javascript\">"
-        "        var socket;"
-        ""
-        "        function openSocket() {"
-        "            if(socket == undefined || socket.readyState == 0 || socket.readyState == 3) {"
-        "                socket = new WebSocket(\"ws://\" + window.location.hostname + \":8101\");"
-        ""
-        "                socket.onmessage = function (event) {"
-        "                    if(event.data != \"S:K\") {"
-        "                        document.getElementById(\"status\").innerHTML += event.data + \"<br>\";"
-        "                    }"
-        "                };"
-        ""
-        "                socket.onclose = function (event) {"
-        "                    document.getElementById(\"status\").innerHTML += \"Closed\";"
-        "                    document.getElementById(\"openBtn\").innerHTML = \"Open\";"
-        "                };"
-        ""
-        "                socket.onopen = function (event) {"
-        "                    document.getElementById(\"status\").innerHTML = \"Opened<br>\";"
-        "                    document.getElementById(\"openBtn\").innerHTML = \"Close\";"
-        "                };"
-        "            } else if(socket.readyState == 1) {"
-        "                socket.close();"
-        "            }"
-        "        }"
-        ""
-        "        function sendRgb() {"
-        "            if(socket.readyState == 1) {"
-        "                socket.send(\"S\" + (document.getElementById(\"rr\").value / 100.0) + \" \""
-        "                    + (document.getElementById(\"gr\").value / 100.0) + \" \""
-        "                    + (document.getElementById(\"br\").value / 100.0));"
-        "            }"
-        "        }"
-        "    </script>"
-        "</head>"
-        "<body>"
-        "    <input type=\"range\" value=\"0\" step=\"0.01\" style=\"width: 500px\" id=\"rr\" oninput=\"sendRgb()\"/><br>"
-        "    <input type=\"range\" value=\"0\" step=\"0.01\" style=\"width: 500px\" id=\"gr\" oninput=\"sendRgb()\"/><br>"
-        "    <input type=\"range\" value=\"0\" step=\"0.01\" style=\"width: 500px\" id=\"br\" oninput=\"sendRgb()\"/><br>"
-        "    <button onclick=\"openSocket()\" id=\"openBtn\">Open</button><br>"
-        "    <span id=\"status\"></span>"
-        "</body>"
-        "</html>";
-
 bool WebServerHandler::canHandle(HTTPMethod method, String uri) {
     return true;
 }
@@ -84,7 +34,9 @@ bool WebServerHandler::handle(ESP8266WebServer &server, HTTPMethod requestMethod
 
         return true;
     } else if (requestUri.equals("/")) {
-        server.send(200, "text/html", FPSTR(MAINPAGE));
+        File file = SPIFFS.open("/www/index.html", "r");
+        server.streamFile(file, "text/html");
+        file.close();
 
         return true;
     } else {

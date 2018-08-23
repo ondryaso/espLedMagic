@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <FS.h>
 
 #include "Main.h"
 #include "LedMan.h"
@@ -12,6 +13,7 @@ class WebServerHandler : public RequestHandler {
 public:
     explicit WebServerHandler(LedMan * ledManager) {
         this->lm = ledManager;
+        SPIFFS.begin();
     }
 
     virtual bool canHandle(HTTPMethod method, String uri);
