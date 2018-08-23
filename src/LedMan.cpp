@@ -1,5 +1,11 @@
-#include <HardwareSerial.h>
-#include <math.h>
+#include <cmath>
+
+#include <cmath>
+
+#include <cmath>
+
+#include <cmath>
+
 #include "LedMan.h"
 
 LedMan::LedMan() {
@@ -9,8 +15,8 @@ LedMan::LedMan() {
     this->b = this->g + 1;
 
     this->mode = MANUAL;
-    this->modeSettings = NULL;
-    this->sinrbSettings = NULL;
+    this->modeSettings = nullptr;
+    this->sinrbSettings = nullptr;
 }
 
 LedMode LedMan::getMode() {
@@ -79,7 +85,7 @@ float * LedMan::getRGB() {
 void LedMan::setModeSettings(ModeSettings * settings) {
     if (settings->targetMode == this->mode) {
         delete this->modeSettings;
-        this->sinrbSettings = NULL;
+        this->sinrbSettings = nullptr;
 
         this->modeSettings = settings;
 
@@ -100,10 +106,10 @@ void LedMan::calculateStep(unsigned long time) {
 }
 
 void LedMan::calculateSinRainbow(unsigned long time) {
-    *this->r = (float) fabs(sin(((LM_PI * (time + this->sinrbSettings->redOffset)) /
+    *this->r = std::fabs(std::sin(((LM_PI * (time + this->sinrbSettings->redOffset)) /
                 (this->sinrbSettings->peakTime * 2)))) * this->sinrbSettings->intensityMultiplier;
-    *this->g = (float) fabs(sin(((LM_PI * (time + this->sinrbSettings->blueOffset)) /
+    *this->g = std::fabs(std::sin(((LM_PI * (time + this->sinrbSettings->blueOffset)) /
                 (this->sinrbSettings->peakTime * 2)))) * this->sinrbSettings->intensityMultiplier;
-    *this->b = (float) fabs(sin(((LM_PI * (time + this->sinrbSettings->greenOffset)) /
+    *this->b = std::fabs(std::sin(((LM_PI * (time + this->sinrbSettings->greenOffset)) /
                 (this->sinrbSettings->peakTime * 2)))) * this->sinrbSettings->intensityMultiplier;
 }

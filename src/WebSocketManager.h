@@ -6,7 +6,7 @@
 
 class WebSocketManager {
 public:
-    WebSocketManager(LedMan * ledManager) {
+    explicit WebSocketManager(LedMan * ledManager) : clientsToNotify() {
         this->ledManager = ledManager;
         this->server = new WebSocketsServer(8101);
     }

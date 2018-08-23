@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <Arduino.h>
+#include <HardwareSerial.h>
 
 #define LM_PI 3.141592653f
 
@@ -60,7 +61,7 @@ public:
     static ModeSettings * createModeSettings(LedMode mode, const char * setstr) {
         switch (mode) {
             case MANUAL:
-                return NULL;
+                return nullptr;
             case SIN_RAINBOW: {
                 char * end;
                 SinRainbowModeSettings * set = new SinRainbowModeSettings();
@@ -72,28 +73,28 @@ public:
                 return set;
             }
             default:
-                return NULL;
+                return nullptr;
         }
     }
 
     static const char * createSettingsString(ModeSettings * set) {
         switch (set->targetMode) {
             case MANUAL: {
-                return NULL;
+                return nullptr;
             }
             case SIN_RAINBOW: {
                 char * ret = new char[50];
-                SinRainbowModeSettings * srs = static_cast<SinRainbowModeSettings *>(set);
+                SinRainbowModeSettings * srs = (SinRainbowModeSettings *)(set);
                 int p = os_sprintf(ret, "%d %d %d %d %f", srs->peakTime, srs->redOffset, srs->greenOffset,
                                 srs->blueOffset, srs->intensityMultiplier);
                 if(p > 0) {
                     return ret;
                 } else {
-                    return NULL;
+                    return nullptr;
                 }
             }
             default:
-                return NULL;
+                return nullptr;
         }
     }
 

@@ -10,7 +10,7 @@
 
 class WebServerHandler : public RequestHandler {
 public:
-    WebServerHandler(LedMan * ledManager) {
+    explicit WebServerHandler(LedMan * ledManager) {
         this->lm = ledManager;
     }
 

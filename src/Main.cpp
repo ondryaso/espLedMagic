@@ -30,8 +30,6 @@ void setup() {
     pinMode(D3, OUTPUT);
 }
 
-#define PRCNTG(i) (int)((*(i)) * 100)
-
 void loop() {
     ArduinoOTA.handle();
     server.handleClient();

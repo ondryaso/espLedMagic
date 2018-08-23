@@ -1,6 +1,6 @@
 #include "WebSocketManager.h"
 
-WebSocketManager* WebSocketManager::instance = 0;
+WebSocketManager* WebSocketManager::instance = nullptr;
 
 void WebSocketManager::init() {
     this->server->begin();
@@ -9,7 +9,7 @@ void WebSocketManager::init() {
 }
 
 void WebSocketManager::notifyClients() {
-    for(int i = 0; i < 16; i++) {
+    for(uint8_t i = 0; i < 16; i++) {
         if(clientsToNotify[i] != 0 && (millis() % clientsToNotify[i]) == 0) {
             char * s = getColorString('X');
             server->sendTXT(i, s);
@@ -41,7 +41,7 @@ void WebSocketManager::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payl
 
             switch(payload[0]) {
                 case 'M':
-                    instance->ledManager->setMode(static_cast<LedMode>(strtol((const char *)(payload + 1), NULL, 10)));
+                    instance->ledManager->setMode(static_cast<LedMode>(strtol((const char *)(payload + 1), nullptr, 10)));
                     // TODO
                     instance->server->sendTXT(num, "M:K");
                     break;
@@ -51,14 +51,14 @@ void WebSocketManager::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payl
 
                         *instance->ledManager->r = (float) strtod((const char *) (payload + 1), &last);
                         *instance->ledManager->g = (float) strtod(last, &last);
-                        *instance->ledManager->b = (float) strtod(last, NULL);
+                        *instance->ledManager->b = (float) strtod(last, nullptr);
 
                         instance->server->sendTXT(num, "S:K");
                     } else {
                         ModeSettings * set = LedMan::createModeSettings(instance->ledManager->getMode(),
                                                                         (const char *) (payload + 1));
 
-                        if (set != NULL) {
+                        if (set != nullptr) {
                             instance->ledManager->setModeSettings(set);
                             instance->server->sendTXT(num, "S:K");
                         } else {
@@ -74,7 +74,7 @@ void WebSocketManager::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payl
                 }
                 case 'N': {
                     if(num < 16) {
-                        instance->clientsToNotify[num] = (int) strtol((const char *) (payload + 1), NULL, 10);
+                        instance->clientsToNotify[num] = (int) strtol((const char *) (payload + 1), nullptr, 10);
                     }
 
                     instance->server->sendTXT(num, "N:K");
