@@ -1,7 +1,8 @@
 #ifndef ESPTEST_LEDMAN_H
 #define ESPTEST_LEDMAN_H
 
-#include <string.h>
+#include <cmath>
+#include <cstring>
 #include <Arduino.h>
 #include <HardwareSerial.h>
 
@@ -37,6 +38,7 @@ public:
     float * r;
     float * g;
     float * b;
+    float * w;
 
     LedMan();
 
@@ -47,15 +49,21 @@ public:
     void calculateStep(unsigned long time);
     void black();
     void white();
+    void fullWhite();
 
     float getR();
     float getG();
     float getB();
-    float * getRGB();
+    float getW();
+    float * getRGBW();
+
     void setR(float r);
     void setG(float g);
     void setB(float b);
+    void setW(float w);
+    void setRGBW(float r, float g, float b, float w);
     void setRGB(float r, float g, float b);
+    void setRGBW(float * rgbw);
     void setRGB(float * rgb);
 
     static ModeSettings * createModeSettings(LedMode mode, const char * setstr) {
