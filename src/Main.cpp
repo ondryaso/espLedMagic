@@ -26,7 +26,7 @@ void setup() {
     pinMode(D1, OUTPUT);
     pinMode(D2, OUTPUT);
     pinMode(D3, OUTPUT);
-    pinMode(D4, OUTPUT);
+    pinMode(D8, OUTPUT);
 }
 
 void loop() {
@@ -37,9 +37,9 @@ void loop() {
     analogWrite(D1, (int)((*ledManager.r) * 4095));
     analogWrite(D2, (int)((*ledManager.g) * 4095));
     analogWrite(D3, (int)((*ledManager.b) * 4095));
-    analogWrite(D4, (int)((*ledManager.w) * 4095));
+    analogWrite(D8, (int) ((*ledManager.w) * 4095));
 
-    ws.notifyClients();   
+    ws.notifyClients();
 }
 
 void initWifi() {

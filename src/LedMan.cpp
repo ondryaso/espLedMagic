@@ -48,26 +48,26 @@ void LedMan::fullWhite() {
 }
 
 void LedMan::setR(float r) {
-    *this->r = r;
+    LM_SET(r, r);
 }
 
 void LedMan::setG(float g) {
-    *this->g = g;
+    LM_SET(g, g);
 }
 
 void LedMan::setB(float b) {
-    *this->b = b;
+    LM_SET(b, b);
 }
 
 void LedMan::setW(float w) {
-    *this->w = w;
+    LM_SET(w, w);
 }
 
 void LedMan::setRGBW(float r, float g, float b, float w) {
-    *this->r = r;
-    *this->g = g;
-    *this->b = b;
-    *this->w = w;
+    LM_SET(r, r);
+    LM_SET(g, g);
+    LM_SET(b, b);
+    LM_SET(w, w);
 }
 
 void LedMan::setRGBW(float * rgbw) {

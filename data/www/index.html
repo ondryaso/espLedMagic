@@ -5,22 +5,34 @@
     <title>ESP PLOX</title>
     <script type="text/javascript">
         var socket;
+        var notify = false;
 
         function openSocket() {
             if (socket === undefined || socket.readyState === 0 || socket.readyState === 3) {
                 socket = new WebSocket("ws://" + window.location.hostname + ":8101");
                 socket.onmessage = function (event) {
-                    if (event.data !== "S:K") {
+                    if (event.data.indexOf("X:") === 0) {
+                        var parts = event.data.substr(2).split(" ");
+                        document.getElementById("rr").value = parts[0] * 100.0;
+                        document.getElementById("gr").value = parts[1] * 100.0;
+                        document.getElementById("br").value = parts[2] * 100.0;
+                        document.getElementById("wr").value = parts[3] * 100.0;
+
+                    } else if (event.data !== "S:K" && event.data !== "C:K") {
                         document.getElementById("status").innerHTML += event.data + "<br>";
                     }
                 };
                 socket.onclose = function (event) {
                     document.getElementById("status").innerHTML += "Closed";
                     document.getElementById("openBtn").innerHTML = "Open";
+                    document.getElementById("notifyToggleBtn").setAttribute("disabled", "disabled");
+                    notify = false;
                 };
+                socket.onerror = socket.onclose;
                 socket.onopen = function (event) {
                     document.getElementById("status").innerHTML = "Opened<br>";
                     document.getElementById("openBtn").innerHTML = "Close";
+                    document.getElementById("notifyToggleBtn").removeAttribute("disabled");
                 };
             } else if (socket.readyState === 1) {
                 socket.close();
@@ -31,13 +43,33 @@
             if (socket.readyState === 1) {
                 socket.send("S" + (document.getElementById("rr").value / 100.0) + " " + (document.getElementById("gr").value / 100.0) + " " + (document.getElementById("br").value / 100.0));
             }
-        }    </script>
+        }
+
+        function sendChan(chan, id) {
+            if (socket.readyState === 1) {
+                var msg = "C" + chan + " " + (document.getElementById(id).value / 100.0);
+                socket.send(msg);
+            }
+        }
+
+        function toggleNotify() {
+            if (socket.readyState === 1) {
+                if (notify) {
+                    socket.send("N");
+                } else {
+                    socket.send("N100");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
-<input type="range" value="0" step="0.01" style="width: 500px" id="rr" oninput="sendRgb()"/><br>
-<input type="range" value="0" step="0.01" style="width: 500px" id="gr" oninput="sendRgb()"/><br>
-<input type="range" value="0" step="0.01" style="width: 500px" id="br" oninput="sendRgb()"/><br>
+<input type="range" value="0" step="0.01" style="width: 500px" id="rr" oninput="sendChan(0, 'rr')"/><br>
+<input type="range" value="0" step="0.01" style="width: 500px" id="gr" oninput="sendChan(1, 'gr')"/><br>
+<input type="range" value="0" step="0.01" style="width: 500px" id="br" oninput="sendChan(2, 'br')"/><br>
+<input type="range" value="0" step="0.01" style="width: 500px" id="wr" oninput="sendChan(3, 'wr')"/><br>
 <button onclick="openSocket()" id="openBtn">Open</button>
+<button onclick="toggleNotify()" id="notifyToggleBtn" disabled>Toggle Notify</button>
 <br>
 <span id="status"></span>
 </body>

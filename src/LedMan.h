@@ -7,6 +7,7 @@
 #include <HardwareSerial.h>
 
 #define LM_PI 3.141592653f
+#define LM_SET(chan, val) *this->chan = (((val) > 1) ? 1 : (((val) < 0) ? 0 : (val)))
 
 enum LedMode {
     MANUAL = 0, SIN_RAINBOW = 1
