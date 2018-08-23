@@ -9,9 +9,9 @@
 #include "Main.h"
 #include "LedMan.h"
 
-class WebServerHandler : public RequestHandler {
+class ClassicWebServerHandler : public RequestHandler {
 public:
-    explicit WebServerHandler(LedMan * ledManager) {
+    explicit ClassicWebServerHandler(LedMan * ledManager) {
         this->lm = ledManager;
         SPIFFS.begin();
     }

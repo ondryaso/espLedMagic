@@ -1,13 +1,11 @@
 #include "Main.h"
+#include "AsyncWebServerManager.h"
 
 const char* ssid = "EvilWiFi";
 const char* password = "12345678998765432112345";
 
-WiFiUDP udp;
-ESP8266WebServer server(80);
-
 LedMan ledManager = LedMan();
-WebServerHandler handler = WebServerHandler(&ledManager);
+AsyncWebServerManager s = AsyncWebServerManager(&ledManager);
 WebSocketManager ws = WebSocketManager(&ledManager);
 
 void setup() {    
@@ -33,7 +31,6 @@ void setup() {
 
 void loop() {
     ArduinoOTA.handle();
-    server.handleClient();
 
     ledManager.calculateStep(millis());
     
@@ -85,8 +82,7 @@ void initOTA() {
 }
 
 void initServer() {
-    server.addHandler(&handler);
-    server.begin();
+    s.init();
 }
 
 void initWS() {

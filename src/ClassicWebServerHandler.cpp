@@ -1,14 +1,14 @@
-#include "WebServerHandler.h"
+#include "ClassicWebServerHandler.h"
 
-bool WebServerHandler::canHandle(HTTPMethod method, String uri) {
+bool ClassicWebServerHandler::canHandle(HTTPMethod method, String uri) {
     return true;
 }
 
-bool WebServerHandler::canUpload(String uri) {
+bool ClassicWebServerHandler::canUpload(String uri) {
     return false;
 }
 
-bool WebServerHandler::handle(ESP8266WebServer &server, HTTPMethod requestMethod, String requestUri) {
+bool ClassicWebServerHandler::handle(ESP8266WebServer &server, HTTPMethod requestMethod, String requestUri) {
     float * target;
 
     if (requestUri.equalsIgnoreCase("/r")) {
@@ -64,7 +64,7 @@ bool WebServerHandler::handle(ESP8266WebServer &server, HTTPMethod requestMethod
     return true;
 }
 
-void WebServerHandler::upload(ESP8266WebServer &server, String requestUri, HTTPUpload &upload) {
+void ClassicWebServerHandler::upload(ESP8266WebServer &server, String requestUri, HTTPUpload &upload) {
     RequestHandler::upload(server, requestUri, upload);
 }
 
